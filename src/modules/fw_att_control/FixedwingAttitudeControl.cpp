@@ -88,7 +88,7 @@ void
 FixedwingAttitudeControl::vehicle_manual_poll(const float yaw_body)
 {
 	if (_vcontrol_mode.flag_control_manual_enabled && _in_fw_or_transition_wo_tailsitter_transition) {
-3x
+
 		// Always copy the new manual setpoint, even if it wasn't updated, to fill the actuators with valid values
 		if (_manual_control_setpoint_sub.copy(&_manual_control_setpoint)) {
 

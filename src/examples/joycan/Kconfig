@@ -1,0 +1,5 @@
+menuconfig EXAMPLES_JOYCAN
+	bool "joyCAN"
+	default n
+	---help---
+		Enable support for joyCAN
