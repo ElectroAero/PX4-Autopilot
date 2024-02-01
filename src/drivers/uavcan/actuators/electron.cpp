@@ -65,7 +65,7 @@ void UavcanElectron::periodic_update(const uavcan::TimerEvent &) {
 	int RLS = (((int)actuatorOutputs.output[6] == 2000) ? 255 : (((int)actuatorOutputs.output[6] - 1000) / 125) * 32);
 	int RRS = (((int)actuatorOutputs.output[7] == 2000) ? 255 : (((int)actuatorOutputs.output[7] - 1000) / 125) * 32);
 
-	uavcan::equipment::Electron msg;
+	uavcan::equipment::enautic::Electron msg;
 
 	// msg.buffer = 1;
 	msg.leftMotor = LM;

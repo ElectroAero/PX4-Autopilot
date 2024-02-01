@@ -1,7 +1,7 @@
 #pragma once
 
 #include <uavcan/uavcan.hpp>
-#include <uavcan/equipment/joystick/JoyCAN.hpp>
+#include <uavcan/equipment/enautic/JoyCAN.hpp>
 #include <uORB/topics/manual_control_setpoint.h>
 
 #include <perf/perf_counter.h>
@@ -27,6 +27,6 @@ class UavcanJoystickCAN
 		<UavcanJoystickCAN *, void (UavcanJoystickCAN::*)(const uavcan::TimerEvent &)> TimerCbBinder;
 
 		uavcan::INode 		&_node;
-		uavcan::Publisher<uavcan::equipment::joystick::JoyCAN> _uavcan_pub_joyCAN_send;
+		uavcan::Publisher<uavcan::equipment::enautic::JoyCAN> _uavcan_pub_joyCAN_send;
 		uavcan::TimerEventForwarder<TimerCbBinder> _timer;
 };

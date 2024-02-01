@@ -53,6 +53,7 @@ uint8 NAVIGATION_STATE_AUTO_PRECLAND = 20       # Precision land with landing ta
 uint8 NAVIGATION_STATE_ORBIT = 21               # Orbit in a circle
 uint8 NAVIGATION_STATE_AUTO_VTOL_TAKEOFF = 22   # Takeoff, transition, establish loiter
 uint8 NAVIGATION_STATE_MAX = 23
+uint8 NAVIGATION_STATE_FOIL = 24		# Foiling for WaveFlyer
 
 # Bitmask of detected failures
 uint16 failure_detector_status

@@ -66,7 +66,7 @@ void UavcanJoystickCAN::periodic_update(const uavcan::TimerEvent &) {
 	int test2 = ((int)moment2);
 	int test3 = ((int)moment3);
 	int test4 = ((int)moment4);
-	uavcan::equipment::joystick::JoyCAN msg;
+	uavcan::equipment::enautic::JoyCAN msg;
 
 	msg.roll = test1;
 	msg.pitch = test2;
