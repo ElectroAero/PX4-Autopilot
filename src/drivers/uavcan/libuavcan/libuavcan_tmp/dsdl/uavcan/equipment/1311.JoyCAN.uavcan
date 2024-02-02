@@ -1,0 +1,4 @@
+uint8 roll
+uint8 pitch
+uint8 yaw
+uint8 throttle

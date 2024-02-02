@@ -1,12 +1,16 @@
-[submodule "src/modules/mavlink/mavlink"]
+[submodule "src/modules/mavlink/mavlink"] # done
 	path = src/modules/mavlink/mavlink
 	url = https://github.com/mavlink/mavlink.git
 	branch = master
-[submodule "Tools/simulation/jmavsim/jMAVSim"]
+[submodule "src/drivers/uavcan/libuavcan"] # done
+	path = src/drivers/uavcan/libuavcan
+	url = https://github.com/dronecan/libuavcan.git
+	branch = main
+[submodule "Tools/simulation/jmavsim/jMAVSim"] # done
 	path = Tools/simulation/jmavsim/jMAVSim
 	url = https://github.com/PX4/jMAVSim.git
 	branch = main
-[submodule "Tools/simulation/gazebo-classic/sitl_gazebo-classic"]
+[submodule "Tools/simulation/gazebo-classic/sitl_gazebo-classic"] # done
 	path = Tools/simulation/gazebo-classic/sitl_gazebo-classic
 	url = https://github.com/PX4/PX4-SITL_gazebo-classic.git
 	branch = main
