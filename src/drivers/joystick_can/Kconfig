@@ -1,0 +1,5 @@
+menuconfig DRIVERS_JOYSTICK_CAN
+	bool "joystick_can"
+	default n
+	---help---
+		Enable support for joycstick_can
