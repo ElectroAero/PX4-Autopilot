@@ -1,8 +1,0 @@
-uint8 leftMotor
-uint8 rightMotor
-
-uint8 FLServo
-uint8 FRServo
-
-uint8 RLServo
-uint8 RRServo
