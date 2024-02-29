@@ -136,3 +136,6 @@ The PX4 Autopilot project including all of its trademarks is hosted under [Drone
 <a href="https://www.dronecode.org/" style="padding:20px" ><img src="https://mavlink.io/assets/site/logo_dronecode.png" alt="Dronecode Logo" width="110px"/></a>
 <a href="https://www.linuxfoundation.org/projects" style="padding:20px;"><img src="https://mavlink.io/assets/site/logo_linux_foundation.png" alt="Linux Foundation Logo" width="80px" /></a>
 <div style="padding:10px">&nbsp;</div>
+
+
+WARNING: For ElectroNautic, ensure local UAVCAN payload files are added before running make cmd

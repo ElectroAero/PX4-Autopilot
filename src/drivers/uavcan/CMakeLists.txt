@@ -161,8 +161,7 @@ px4_add_module(
 		actuators/servo.cpp
 
 		#Custom EN
-		actuators/electron.cpp
-		actuators/joystickCAN.cpp
+		ENautic/electron.cpp
 
 		# Sensors
 		sensors/sensor_bridge.cpp
