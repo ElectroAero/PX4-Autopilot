@@ -59,7 +59,7 @@
 #include "uavcan_driver.hpp"
 #include "uavcan_servers.hpp"
 
-#include "actuators/electron.hpp"
+#include "ENautic/electron.hpp"
 // #include "actuators/joystickCAN.hpp"
 
 #include <lib/drivers/device/Device.hpp>

@@ -67,15 +67,12 @@ void UavcanElectron::periodic_update(const uavcan::TimerEvent &) {
 
 	uavcan::equipment::enautic::Electron msg;
 
-	// msg.buffer = 1;
 	msg.leftMotor = LM;
 	msg.rightMotor = RM;
 
-	// msg.buffer2 = 2;
 	msg.FLServo = FLS;
 	msg.FRServo = FRS;
 
-	// msg.buffer3 = 3;
 	msg.RLServo = RLS;
 	msg.RRServo = RRS;
 
