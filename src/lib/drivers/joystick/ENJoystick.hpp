@@ -8,7 +8,7 @@ class ENJoystick
 {
 public:
 	ENJoystick(const uint32_t device_id);
-	// ~ENJoystick();
+	~ENJoystick();
 
 	uint32_t get_device_id() const { return _device_id; }
 

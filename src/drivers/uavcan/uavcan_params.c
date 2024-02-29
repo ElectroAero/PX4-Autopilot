@@ -343,6 +343,18 @@ PARAM_DEFINE_INT32(UAVCAN_SUB_ICE, 0);
 PARAM_DEFINE_INT32(UAVCAN_SUB_IMU, 0);
 
 /**
+ * subscription Joystick
+ *
+ * Enable UAVCAN Joystick subscription.
+ *  uavcan::equipment::enautic::JoyCAN
+ *
+ * @boolean
+ * @reboot_required true
+ * @group UAVCAN
+ */
+ PARAM_DEFINE_INT32(UAVCAN_SUB_JOY, 0);
+
+/**
  * subscription magnetometer
  *
  * Enable UAVCAN mag subscription.

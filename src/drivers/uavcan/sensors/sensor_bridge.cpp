@@ -51,12 +51,14 @@
 #include "mag.hpp"
 #include "rangefinder.hpp"
 #include "safety_button.hpp"
+#include "joystickCAN.hpp"
 
 /*
  * IUavcanSensorBridge
  */
 void IUavcanSensorBridge::make_all(uavcan::INode &node, List<IUavcanSensorBridge *> &list)
 {
+
 	// airspeed
 	int32_t uavcan_sub_aspd = 1;
 	param_get(param_find("UAVCAN_SUB_ASPD"), &uavcan_sub_aspd);
@@ -152,6 +154,13 @@ void IUavcanSensorBridge::make_all(uavcan::INode &node, List<IUavcanSensorBridge
 
 	if (uavcan_sub_button != 0) {
 		list.add(new UavcanSafetyButtonBridge(node));
+	}
+
+	// joystick
+	int32_t uavcan_sub_joy = 1;
+	param_get(param_find("UAVCAN_SUB_JOY"), &uavcan_sub_joy);
+	if (uavcan_sub_joy != 0) {
+		list.add(new UavcanJoyBridge(node));
 	}
 }
 
