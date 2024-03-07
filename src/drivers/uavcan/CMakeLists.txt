@@ -163,6 +163,9 @@ px4_add_module(
 		#Custom EN
 		ENautic/electron.cpp
 
+		debug/joystickListener.cpp
+		debug/controlSetpoints.cpp
+
 		# Sensors
 		sensors/sensor_bridge.cpp
 		sensors/differential_pressure.cpp

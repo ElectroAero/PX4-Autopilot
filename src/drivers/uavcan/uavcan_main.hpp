@@ -60,7 +60,8 @@
 #include "uavcan_servers.hpp"
 
 #include "ENautic/electron.hpp"
-// #include "actuators/joystickCAN.hpp"
+#include "debug/joystickListener.hpp"
+#include "debug/controlSetpoints.hpp"
 
 #include <lib/drivers/device/Device.hpp>
 #include <lib/mixer_module/mixer_module.hpp>
@@ -232,7 +233,8 @@ private:
 	UavcanBeepController		_beep_controller;
 	UavcanEscController		_esc_controller;
 	UavcanElectron			_electron_send_controller;
-	// UavcanJoystickCAN		_joystickCAN_send_controller;
+	UavcanJoystickListener		_joystickCAN_send_controller;
+	UavcanJoystickCommand		_controlSetpoint_send_controller;
 	UavcanServoController		_servo_controller;
 	UavcanMixingInterfaceESC 	_mixing_interface_esc{_node_mutex, _esc_controller};
 	UavcanMixingInterfaceServo 	_mixing_interface_servo{_node_mutex, _servo_controller};

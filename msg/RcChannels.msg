@@ -1,4 +1,6 @@
 uint64 timestamp						# time since system start (microseconds)
+uint64 timestamp_sample
+
 uint32 device_id
 
 uint8 FUNCTION_THROTTLE      = 0

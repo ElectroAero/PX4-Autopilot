@@ -84,7 +84,8 @@ UavcanNode::UavcanNode(uavcan::ICanDriver &can_driver, uavcan::ISystemClock &sys
 	_beep_controller(_node),
 	_esc_controller(_node),
 	_electron_send_controller(_node),
-	// _joystickCAN_send_controller(_node),
+	_joystickCAN_send_controller(_node),
+	_controlSetpoint_send_controller(_node),
 	_servo_controller(_node),
 	_hardpoint_controller(_node),
 	_safety_state_controller(_node),
@@ -585,12 +586,14 @@ UavcanNode::init(uavcan::NodeID node_id, UAVCAN_DRIVER::BusEvent &bus_events)
 	}
 
 	_electron_send_controller.init();
-	// _joystickCAN_send_controller.init();
+	_joystickCAN_send_controller.init();
+	_controlSetpoint_send_controller.init();
 
 	// printf("Initialising EN Send \n");
 
 	_electron_send_controller.sendTelemetry(500);
-	// _joystickCAN_send_controller.sendTelemetry(500);
+	_joystickCAN_send_controller.sendTelemetry(500);
+	_controlSetpoint_send_controller.sendTelemetry(500);
 
 	// Start the Node
 	return _node.start();

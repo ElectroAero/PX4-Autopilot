@@ -51,6 +51,8 @@
 #include "mavlink_timesync.h"
 #include "tune_publisher.h"
 
+#include <lib/drivers/joystick/ENJoystick.hpp>
+
 #include <geo/geo.h>
 #include <lib/drivers/accelerometer/PX4Accelerometer.hpp>
 #include <lib/drivers/gyroscope/PX4Gyroscope.hpp>
@@ -364,6 +366,7 @@ private:
 	PX4Accelerometer *_px4_accel{nullptr};
 	PX4Gyroscope *_px4_gyro{nullptr};
 	PX4Magnetometer *_px4_mag{nullptr};
+	ENJoystick *_en_joy{nullptr};
 
 	float _global_local_alt0{NAN};
 	MapProjection _global_local_proj_ref{};

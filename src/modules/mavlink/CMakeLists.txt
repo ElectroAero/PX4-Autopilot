@@ -134,6 +134,7 @@ px4_add_module(
 		dataman_client
 		drivers_accelerometer
 		drivers_gyroscope
+		drivers_joystick
 		drivers_magnetometer
 		conversion
 		sensor_calibration

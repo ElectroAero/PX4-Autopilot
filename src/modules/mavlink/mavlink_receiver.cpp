@@ -72,6 +72,7 @@
 MavlinkReceiver::~MavlinkReceiver()
 {
 	delete _tune_publisher;
+	delete _en_joy;
 	delete _px4_accel;
 	delete _px4_gyro;
 	delete _px4_mag;
@@ -2277,6 +2278,15 @@ MavlinkReceiver::handle_message_hil_sensor(mavlink_message_t *msg)
 			_px4_accel->update(timestamp, hil_sensor.xacc, hil_sensor.yacc, hil_sensor.zacc);
 		}
 	}
+
+	//joystick
+	// if((hil_sensor.fields_updated & SensorSource::JOY) == SensorSource::JOY) {
+	// 	if (_en_joy == nullptr) {
+	// 		//1310989: DRV_JOY_DEVTYPE_SIM, BUS: 1, ADDR: 1, TYPE: SIMULATION
+	// 	_	en_joy = new ENJoystick(1310989);
+	// 	}
+
+	// }
 
 	// magnetometer
 	if ((hil_sensor.fields_updated & SensorSource::MAG) == SensorSource::MAG) {
