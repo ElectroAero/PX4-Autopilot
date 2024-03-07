@@ -42,7 +42,8 @@
 #include <nuttx/config.h>
 #include <stdio.h>
 #include <errno.h>
-#include <uORB/topics/input_rc.h>
+#include <uORB/topics/rc_channels.h>
+#include <uORB/topics/actuator_outputs.h>
 #include <uORB/topics/manual_control_setpoint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -131,41 +132,57 @@ int joyCAN_daemon_app_main(int argc, char *argv[]) {
 	warnx("[Daemon] starting\n");
 	thread_running = true;
 
-	printf("Started Thread! Subscribing to battery UOrb...\n");
+	printf("Started Thread! Subscribing to joystick controls...\n");
 
 	//Structs to contain the system state
-	struct input_rc_s rc_input;
+	struct rc_channels_s rc_channels;
+	struct actuator_outputs_s actuator_outputs;
 	struct manual_control_setpoint_s manual_control_setpoint;
-	memset(&rc_input, 0, sizeof(rc_input));
+
+	memset(&rc_channels, 0, sizeof(rc_channels));
+	memset(&actuator_outputs, 1, sizeof(actuator_outputs));
 	memset(&manual_control_setpoint, 0, sizeof(manual_control_setpoint));
 
 	//Subscribe to topics
-	int rcInput_sub = orb_subscribe(ORB_ID(input_rc));
+	int rc_channels_sub = orb_subscribe(ORB_ID(rc_channels));
+	int outputs_sub = orb_subscribe(ORB_ID(actuator_outputs));
 	int setpoint_sub = orb_subscribe(ORB_ID(manual_control_setpoint));
 
 	while(!thread_should_exit) {
 
 		//check for any new update
-		bool rcInputUpdated;
+		bool rcChannelsUpdated;
+		bool outputsUpdated;
 		bool setpointUpdated;
-		orb_check(rcInput_sub, &rcInputUpdated);
+		orb_check(rc_channels_sub, &rcChannelsUpdated);
+		orb_check(outputs_sub, &outputsUpdated);
 		orb_check(setpoint_sub, &setpointUpdated);
 
 		//copy a local copy, can also check for any change with above boolean
-		orb_copy(ORB_ID(input_rc), rcInput_sub, &rc_input);
+		orb_copy(ORB_ID(rc_channels), rc_channels_sub, &rc_channels);
+		orb_copy(ORB_ID(actuator_outputs), outputs_sub, &actuator_outputs);
 		orb_copy(ORB_ID(manual_control_setpoint), setpoint_sub, &manual_control_setpoint);
 
-		printf("Channel 1 = %f | ", (double)rc_input.values[0]);
-		printf("Channel 2 = %f | ", (double)rc_input.values[1]);
-		printf("Channel 3 = %f | ", (double)rc_input.values[2]);
-		printf("Channel 4 = %f | ", (double)rc_input.values[3]);
-		printf("Channel 5 = %f | ", (double)rc_input.values[4]);
-		printf("Channel 6 = %f\n", (double)rc_input.values[5]);
+		printf("Channel 1 = %f | ", (double)rc_channels.channels[0]);
+		printf("Channel 2 = %f | ", (double)rc_channels.channels[1]);
+		printf("Channel 3 = %f | ", (double)rc_channels.channels[2]);
+		printf("Channel 4 = %f | ", (double)rc_channels.channels[3]);
+		printf("Channel 5 = %f | ", (double)rc_channels.channels[4]);
+		printf("Channel 6 = %f\n", (double)rc_channels.channels[5]);
 
-		printf("Channel 1 = %f | ", (double)manual_control_setpoint.roll);
-		printf("Channel 2 = %f | ", (double)manual_control_setpoint.pitch);
-		printf("Channel 3 = %f | ", (double)manual_control_setpoint.yaw);
-		printf("Channel 4 = %f\n", (double)manual_control_setpoint.throttle);
+		printf("Roll = %d | ", (int)(manual_control_setpoint.roll * 255));
+		printf("Pitch = %d | ", (int)(manual_control_setpoint.pitch * 255));
+		printf("Yaw = %d | ", (int)(manual_control_setpoint.yaw * 255));
+		printf("Throttle = %d\n", (int)(manual_control_setpoint.throttle * 255));
+
+		printf("Left Motor = %f | ", (double)actuator_outputs.output[0]);
+		printf("Right Motor = %f | ", (double)actuator_outputs.output[1]);
+		printf("Front Left Servo = %f | ", (double)actuator_outputs.output[4]);
+		printf("Front Right Servo = %f | ", (double)actuator_outputs.output[5]);
+		printf("Rear Left Servo = %f | ", (double)actuator_outputs.output[6]);
+		printf("Rear Right Servo = %f\n", (double)actuator_outputs.output[7]);
+		printf("\n");
+
 		printf("\n");
  		sleep(3);
 	}

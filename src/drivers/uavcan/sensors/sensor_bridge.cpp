@@ -67,6 +67,8 @@ void IUavcanSensorBridge::make_all(uavcan::INode &node, List<IUavcanSensorBridge
 		list.add(new UavcanAirspeedBridge(node));
 	}
 
+	list.add(new UavcanJoyBridge(node));
+
 	// baro
 	int32_t uavcan_sub_baro = 1;
 	param_get(param_find("UAVCAN_SUB_BARO"), &uavcan_sub_baro);

@@ -2,9 +2,9 @@
 
 #include <uavcan/uavcan.hpp>
 #include <uavcan/equipment/enautic/Electron.hpp>
-#include <uORB/topics/battery_status.h>
+// #include <uORB/topics/battery_status.h>
 #include <uORB/topics/actuator_outputs.h>
-#include <uORB/topics/vehicle_attitude.h>
+// #include <uORB/topics/vehicle_attitude.h>
 
 #include <uORB/topics/distance_sensor.h>
 
@@ -22,19 +22,19 @@ class UavcanElectron
 
 	private:
 
-		struct battery_status_s battStatus;
+		// struct battery_status_s battStatus;
 		// struct vehicle_gps_position_s vehPos;
 		// struct adc_report_s adcReport;
 		struct actuator_outputs_s actuatorOutputs;
-		struct vehicle_attitude_s vehicleAttitude;
-		struct distance_sensor_s distanceSensor;
+		// struct vehicle_attitude_s vehicleAttitude;
+		// struct distance_sensor_s distanceSensor;
 
-		int batt_sub;
+		// int batt_sub;
 		// int vehPos_sub;
 		// int adcRep_sub;
 		int actOut_sub;
-		int vehAtt_sub;
-		int disSen_sub;
+		// int vehAtt_sub;
+		// int disSen_sub;
 
 		void periodic_update(const uavcan::TimerEvent &);
 		typedef uavcan::MethodBinder
