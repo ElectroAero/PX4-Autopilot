@@ -42,7 +42,7 @@
 #include <nuttx/config.h>
 #include <stdio.h>
 #include <errno.h>
-#include <uORB/topics/rc_channels.h>
+#include <uORB/topics/joystick_status.h>
 #include <uORB/topics/actuator_outputs.h>
 #include <uORB/topics/manual_control_setpoint.h>
 #include <stdlib.h>
@@ -135,40 +135,39 @@ int joyCAN_daemon_app_main(int argc, char *argv[]) {
 	printf("Started Thread! Subscribing to joystick controls...\n");
 
 	//Structs to contain the system state
-	struct rc_channels_s rc_channels;
+	struct joystick_status_s joystick_status;
 	struct actuator_outputs_s actuator_outputs;
 	struct manual_control_setpoint_s manual_control_setpoint;
 
-	memset(&rc_channels, 0, sizeof(rc_channels));
+	memset(&joystick_status, 0, sizeof(joystick_status));
 	memset(&actuator_outputs, 1, sizeof(actuator_outputs));
 	memset(&manual_control_setpoint, 0, sizeof(manual_control_setpoint));
 
 	//Subscribe to topics
-	int rc_channels_sub = orb_subscribe(ORB_ID(rc_channels));
+	int joystick_status_sub = orb_subscribe(ORB_ID(joystick_status));
 	int outputs_sub = orb_subscribe(ORB_ID(actuator_outputs));
 	int setpoint_sub = orb_subscribe(ORB_ID(manual_control_setpoint));
 
 	while(!thread_should_exit) {
 
 		//check for any new update
-		bool rcChannelsUpdated;
+		bool uavcanJoystickUpdated;
 		bool outputsUpdated;
 		bool setpointUpdated;
-		orb_check(rc_channels_sub, &rcChannelsUpdated);
+		orb_check(joystick_status_sub, &uavcanJoystickUpdated);
 		orb_check(outputs_sub, &outputsUpdated);
 		orb_check(setpoint_sub, &setpointUpdated);
 
 		//copy a local copy, can also check for any change with above boolean
-		orb_copy(ORB_ID(rc_channels), rc_channels_sub, &rc_channels);
+		orb_copy(ORB_ID(joystick_status), joystick_status_sub, &joystick_status);
 		orb_copy(ORB_ID(actuator_outputs), outputs_sub, &actuator_outputs);
 		orb_copy(ORB_ID(manual_control_setpoint), setpoint_sub, &manual_control_setpoint);
 
-		printf("Channel 1 = %f | ", (double)rc_channels.channels[0]);
-		printf("Channel 2 = %f | ", (double)rc_channels.channels[1]);
-		printf("Channel 3 = %f | ", (double)rc_channels.channels[2]);
-		printf("Channel 4 = %f | ", (double)rc_channels.channels[3]);
-		printf("Channel 5 = %f | ", (double)rc_channels.channels[4]);
-		printf("Channel 6 = %f\n", (double)rc_channels.channels[5]);
+		printf("X axis = %f | ", (double)joystick_status.x_axis);
+		printf("Y axis = %f | ", (double)joystick_status.y_axis);
+		printf("Deadman = %f | ", (double)joystick_status.deadman);
+		printf("Left Button = %f | ", (double)joystick_status.lbutton);
+		printf("Right Button = %f | ", (double)joystick_status.rbutton);
 
 		printf("Roll = %d | ", (int)(manual_control_setpoint.roll * 255));
 		printf("Pitch = %d | ", (int)(manual_control_setpoint.pitch * 255));

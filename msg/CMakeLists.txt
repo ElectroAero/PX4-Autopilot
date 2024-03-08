@@ -228,6 +228,7 @@ set(msg_files
 	Wind.msg
 	YawEstimatorStatus.msg
 
+	JoystickStatus.msg
 )
 list(SORT msg_files)
 

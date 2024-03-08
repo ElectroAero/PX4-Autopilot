@@ -162,8 +162,9 @@ px4_add_module(
 
 		#Custom EN
 		ENautic/electron.cpp
+		ENautic/joystickCAN.cpp
 
-		debug/joystickListener.cpp
+
 		debug/controlSetpoints.cpp
 
 		# Sensors
@@ -181,7 +182,6 @@ px4_add_module(
 		sensors/ice_status.cpp
 		sensors/hygrometer.cpp
 		sensors/safety_button.cpp
-		sensors/joystickCAN.cpp
 	MODULE_CONFIG
 		module.yaml
 	DEPENDS
