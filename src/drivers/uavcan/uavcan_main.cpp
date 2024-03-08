@@ -590,7 +590,6 @@ UavcanNode::init(uavcan::NodeID node_id, UAVCAN_DRIVER::BusEvent &bus_events)
 	_joystickCAN_send_controller.init();
 	_controlSetpoint_send_controller.init();
 
-	_joystickCAN_send_controller.
 	// printf("Initialising EN Send \n");
 
 	_electron_send_controller.sendTelemetry(500);

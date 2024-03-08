@@ -7,9 +7,11 @@
 #include <uavcan/uavcan.hpp>
 #include <uavcan/equipment/enautic/JoyCAN.hpp>
 #include <uavcan/equipment/enautic/InputRc.hpp>
+#include <lib/perf/perf_counter.h>
 #include <uORB/PublicationMulti.hpp>
 #include <uORB/topics/input_rc.h>
 #include <uORB/topics/joystick_status.h>
+#include <drivers/drv_hrt.h>
 
 
 class UavcanJoyBridge
