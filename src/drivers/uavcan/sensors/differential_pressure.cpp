@@ -65,20 +65,7 @@ int UavcanDifferentialPressureBridge::init()
 void UavcanDifferentialPressureBridge::air_sub_cb(const
 		uavcan::ReceivedDataStructure<uavcan::equipment::air_data::RawAirData> &msg)
 {
-	const hrt_abstime timestamp_sample = hrt_absolute_time();
+	_joystick_status.y_axis = 3;
 
-	_device_id.devid_s.devtype = DRV_DIFF_PRESS_DEVTYPE_UAVCAN;
-	_device_id.devid_s.address = msg.getSrcNodeID().get() & 0xFF;
-
-	float diff_press_pa = msg.differential_pressure;
-	float temperature_c = msg.static_air_temperature + CONSTANTS_ABSOLUTE_NULL_CELSIUS;
-
-	differential_pressure_s report{};
-	report.timestamp_sample = timestamp_sample;
-	report.device_id = _device_id.devid;
-	report.differential_pressure_pa = diff_press_pa;
-	report.temperature = temperature_c;
-	report.timestamp = hrt_absolute_time();
-
-	publish(msg.getSrcNodeID().get(), &report);
+	_joystick_status_pub.publish(_joystick_status);
 }

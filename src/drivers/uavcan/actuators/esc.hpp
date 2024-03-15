@@ -54,6 +54,8 @@
 #include <drivers/drv_hrt.h>
 #include <lib/mixer_module/mixer_module.hpp>
 
+// #include <uORB/topics/joystick_status.h>
+
 class UavcanEscController
 {
 public:
@@ -80,7 +82,11 @@ public:
 
 	esc_status_s &esc_status() { return _esc_status; }
 
+	// joystick_status_s &joystick_status() { return _joystick_status; }
+
 private:
+	// joystick_status_s	_joystick_status{};
+    	// uORB::PublicationMulti<joystick_status_s> _joystick_status_pub{ORB_ID(joystick_status)};
 	/**
 	 * ESC status message reception will be reported via this callback.
 	 */

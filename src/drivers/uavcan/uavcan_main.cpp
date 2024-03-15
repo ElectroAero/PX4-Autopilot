@@ -84,7 +84,7 @@ UavcanNode::UavcanNode(uavcan::ICanDriver &can_driver, uavcan::ISystemClock &sys
 	_beep_controller(_node),
 	_esc_controller(_node),
 	_electron_send_controller(_node),
-	_joystickCAN_send_controller(_node),
+	// _joystick_controller(_node),
 	_controlSetpoint_send_controller(_node),
 	_servo_controller(_node),
 	_hardpoint_controller(_node),
@@ -106,6 +106,7 @@ UavcanNode::UavcanNode(uavcan::ICanDriver &can_driver, uavcan::ISystemClock &sys
 		std::abort();
 	}
 
+	// _mixing_interface_joystick.mixingOutput().setMaxTopicUpdateRate(1000000 / UavcanJoystickController::MAX_RATE_HZ); // Number is max rate for ESC
 	_mixing_interface_esc.mixingOutput().setMaxTopicUpdateRate(1000000 / UavcanEscController::MAX_RATE_HZ);
 	_mixing_interface_servo.mixingOutput().setMaxTopicUpdateRate(1000000 / UavcanServoController::MAX_RATE_HZ);
 }
@@ -406,7 +407,7 @@ int
 UavcanNode::start(uavcan::NodeID node_id, uint32_t bitrate)
 {
 	if (_instance != nullptr) {
-		PX4_WARN("Already started");
+			PX4_WARN("Already started");
 		return -1;
 	}
 
@@ -587,7 +588,7 @@ UavcanNode::init(uavcan::NodeID node_id, UAVCAN_DRIVER::BusEvent &bus_events)
 	}
 
 	_electron_send_controller.init();
-	_joystickCAN_send_controller.init();
+	// _joystick_controller.init();
 	_controlSetpoint_send_controller.init();
 
 	// printf("Initialising EN Send \n");
@@ -973,12 +974,27 @@ void UavcanMixingInterfaceESC::mixerChanged()
 	_esc_controller.set_rotor_count(rotor_count);
 }
 
+// bool UavcanMixingInterfaceJoystick::updateOutputs(bool stop_motors, uint16_t outputs[MAX_ACTUATORS], unsigned num_outputs,
+// 		unsigned num_control_groups_updated)
+// {
+// 	_joystick_controller.update_outputs(stop_motors, outputs, num_outputs);
+// 	return true;
+// }
+
 bool UavcanMixingInterfaceServo::updateOutputs(bool stop_motors, uint16_t outputs[MAX_ACTUATORS], unsigned num_outputs,
 		unsigned num_control_groups_updated)
 {
 	_servo_controller.update_outputs(stop_motors, outputs, num_outputs);
 	return true;
 }
+
+// void UavcanMixingInterfaceJoystick::Run()
+// {
+// 	pthread_mutex_lock(&_node_mutex);
+// 	_mixing_output.update();
+// 	_mixing_output.updateSubscriptions(false);
+// 	pthread_mutex_unlock(&_node_mutex);
+// }
 
 void UavcanMixingInterfaceServo::Run()
 {

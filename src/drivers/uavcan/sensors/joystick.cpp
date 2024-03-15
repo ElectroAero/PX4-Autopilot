@@ -32,14 +32,13 @@
  ****************************************************************************/
 
 /**
- * @file gnss.cpp
+ * @file joystick.cpp
  *
- * @author Pavel Kirienko <pavel.kirienko@gmail.com>
- * @author Andrew Chambers <achamber@gmail.com>
+ * @author Shami Mohdar <shami@enautic.co>
  *
  */
 
-#include "gnss.hpp"
+#include "joystick.hpp"
 
 #include <cstdint>
 
@@ -50,14 +49,15 @@
 
 using namespace time_literals;
 
-const char *const UavcanGnssBridge::NAME = "gnss";
+const char *const UavcanJoystick::NAME = "joy";
 
-UavcanGnssBridge::UavcanGnssBridge(uavcan::INode &node) :
-	UavcanSensorBridgeBase("uavcan_gnss", ORB_ID(sensor_gps)),
+UavcanJoystick::UavcanJoystick(uavcan::INode &node) :
+	UavcanSensorBridgeBase("uavcan_joy", ORB_ID(sensor_gps)),
 	_node(node),
 	_sub_auxiliary(node),
 	_sub_fix(node),
 	_sub_fix2(node),
+	_sub_joy(node),
 	_pub_moving_baseline_data(node),
 	_pub_rtcm_stream(node),
 	_channel_using_fix2(new bool[_max_channels])
@@ -69,7 +69,7 @@ UavcanGnssBridge::UavcanGnssBridge(uavcan::INode &node) :
 	set_device_type(DRV_GPS_DEVTYPE_UAVCAN);
 }
 
-UavcanGnssBridge::~UavcanGnssBridge()
+UavcanJoystick::~UavcanJoystick()
 {
 	delete [] _channel_using_fix2;
 	perf_free(_rtcm_stream_pub_perf);
@@ -77,29 +77,35 @@ UavcanGnssBridge::~UavcanGnssBridge()
 }
 
 int
-UavcanGnssBridge::init()
+UavcanJoystick::init()
 {
-	int res = _sub_auxiliary.start(AuxiliaryCbBinder(this, &UavcanGnssBridge::gnss_auxiliary_sub_cb));
+	int res = _sub_auxiliary.start(AuxiliaryCbBinder(this, &UavcanJoystick::gnss_auxiliary_sub_cb));
 
 	if (res < 0) {
 		PX4_WARN("GNSS auxiliary sub failed %i", res);
 		return res;
 	}
 
-	res = _sub_fix.start(FixCbBinder(this, &UavcanGnssBridge::gnss_fix_sub_cb));
+	res = _sub_fix.start(FixCbBinder(this, &UavcanJoystick::gnss_fix_sub_cb));
 
 	if (res < 0) {
 		PX4_WARN("GNSS fix sub failed %i", res);
 		return res;
 	}
 
-	res = _sub_fix2.start(Fix2CbBinder(this, &UavcanGnssBridge::gnss_fix2_sub_cb));
+	res = _sub_fix2.start(Fix2CbBinder(this, &UavcanJoystick::gnss_fix2_sub_cb));
 
 	if (res < 0) {
 		PX4_WARN("GNSS fix2 sub failed %i", res);
 		return res;
 	}
 
+	res = _sub_joy.start(JoyCbBinder(this, &UavcanJoystick::joy_sub_cb));
+
+	if (res < 0) {
+		PX4_WARN("GNSS fix2 sub failed %i", res);
+		return res;
+	}
 
 	// UAVCAN_PUB_RTCM
 	int32_t uavcan_pub_rtcm = 0;
@@ -125,20 +131,32 @@ UavcanGnssBridge::init()
 }
 
 void
-UavcanGnssBridge::gnss_auxiliary_sub_cb(const uavcan::ReceivedDataStructure<uavcan::equipment::gnss::Auxiliary> &msg)
+UavcanJoystick::joy_sub_cb(const uavcan::ReceivedDataStructure<uavcan::equipment::enautic::JoyCAN> &msg)
 {
+	static int testJoy = 3;
+	// //Shami - Testing .start(MethodBinder) works for CAN RX
+	_joystick_status.x_axis = testJoy;
+	_joystick_status_pub.publish(_joystick_status);
+	testJoy++;
+}
+
+void
+UavcanJoystick::gnss_auxiliary_sub_cb(const uavcan::ReceivedDataStructure<uavcan::equipment::gnss::Auxiliary> &msg)
+{
+	static int testInt = 0;
 	// store latest hdop and vdop for use in process_fixx();
 	_last_gnss_auxiliary_timestamp = hrt_absolute_time();
 	_last_gnss_auxiliary_hdop = msg.hdop;
 	_last_gnss_auxiliary_vdop = msg.vdop;
 
-	// //Shami - Testing .start(MethodBinder) works for CAN RX
-	// _joystick_status.y_axis = 3;
-	// _joystick_status_pub.publish(_joystick_status);
+	_joystick_status.y_axis = testInt;
+	_joystick_status_pub.publish(_joystick_status);
+
+	// testInt++;
 }
 
 void
-UavcanGnssBridge::gnss_fix_sub_cb(const uavcan::ReceivedDataStructure<uavcan::equipment::gnss::Fix> &msg)
+UavcanJoystick::gnss_fix_sub_cb(const uavcan::ReceivedDataStructure<uavcan::equipment::gnss::Fix> &msg)
 {
 	// Check to see if this node is also publishing a Fix2 message.
 	// If so, ignore the old "Fix" message for this node.
@@ -163,7 +181,7 @@ UavcanGnssBridge::gnss_fix_sub_cb(const uavcan::ReceivedDataStructure<uavcan::eq
 }
 
 void
-UavcanGnssBridge::gnss_fix2_sub_cb(const uavcan::ReceivedDataStructure<uavcan::equipment::gnss::Fix2> &msg)
+UavcanJoystick::gnss_fix2_sub_cb(const uavcan::ReceivedDataStructure<uavcan::equipment::gnss::Fix2> &msg)
 {
 	using uavcan::equipment::gnss::Fix2;
 
@@ -321,7 +339,7 @@ UavcanGnssBridge::gnss_fix2_sub_cb(const uavcan::ReceivedDataStructure<uavcan::e
 }
 
 template <typename FixType>
-void UavcanGnssBridge::process_fixx(const uavcan::ReceivedDataStructure<FixType> &msg,
+void UavcanJoystick::process_fixx(const uavcan::ReceivedDataStructure<FixType> &msg,
 				    uint8_t fix_type,
 				    const float (&pos_cov)[9], const float (&vel_cov)[9],
 				    const bool valid_pos_cov, const bool valid_vel_cov,
@@ -459,7 +477,7 @@ void UavcanGnssBridge::process_fixx(const uavcan::ReceivedDataStructure<FixType>
 	publish(msg.getSrcNodeID().get(), &report);
 }
 
-void UavcanGnssBridge::update()
+void UavcanJoystick::update()
 {
 	handleInjectDataTopic();
 }
@@ -469,7 +487,7 @@ void UavcanGnssBridge::update()
 // sent from a GCS (usually over MAVLINK GPS_RTCM_DATA).
 // Forwarding this data to the UAVCAN bus enables DGPS/RTK GPS
 // to work.
-void UavcanGnssBridge::handleInjectDataTopic()
+void UavcanJoystick::handleInjectDataTopic()
 {
 	// We don't want to call copy again further down if we have already done a
 	// copy in the selection process.
@@ -528,7 +546,7 @@ void UavcanGnssBridge::handleInjectDataTopic()
 	} while (updated && num_injections < max_num_injections);
 }
 
-bool UavcanGnssBridge::PublishRTCMStream(const uint8_t *const data, const size_t data_len)
+bool UavcanJoystick::PublishRTCMStream(const uint8_t *const data, const size_t data_len)
 {
 	uavcan::equipment::gnss::RTCMStream msg;
 
@@ -558,7 +576,7 @@ bool UavcanGnssBridge::PublishRTCMStream(const uint8_t *const data, const size_t
 	return result;
 }
 
-bool UavcanGnssBridge::PublishMovingBaselineData(const uint8_t *data, size_t data_len)
+bool UavcanJoystick::PublishMovingBaselineData(const uint8_t *data, size_t data_len)
 {
 	ardupilot::gnss::MovingBaselineData msg;
 
@@ -586,7 +604,7 @@ bool UavcanGnssBridge::PublishMovingBaselineData(const uint8_t *data, size_t dat
 	return result;
 }
 
-void UavcanGnssBridge::print_status() const
+void UavcanJoystick::print_status() const
 {
 	UavcanSensorBridgeBase::print_status();
 	perf_print_counter(_rtcm_stream_pub_perf);

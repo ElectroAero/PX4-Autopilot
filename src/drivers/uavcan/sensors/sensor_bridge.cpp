@@ -52,6 +52,9 @@
 #include "rangefinder.hpp"
 #include "safety_button.hpp"
 
+// Done by yours truly, Shami
+#include "joystick.hpp"
+
 /*
  * IUavcanSensorBridge
  */
@@ -104,6 +107,13 @@ void IUavcanSensorBridge::make_all(uavcan::INode &node, List<IUavcanSensorBridge
 
 	if (uavcan_sub_gps != 0) {
 		list.add(new UavcanGnssBridge(node));
+	}
+
+	// joystick by Shami
+	int32_t uavcan_sub_joy = 1;
+	param_get(param_find("UAVCAN_SUB_JOY"), &uavcan_sub_joy);
+	if (uavcan_sub_joy != 0) {
+		list.add(new UavcanJoystick(node));
 	}
 
 	// hygrometer

@@ -57,6 +57,9 @@
 #include <ardupilot/gnss/MovingBaselineData.hpp>
 #include <uavcan/equipment/gnss/RTCMStream.hpp>
 
+// #include <uORB/topics/joystick_status.h>
+// #include <uORB/PublicationMulti.hpp>
+
 #include <lib/perf/perf_counter.h>
 
 #include "sensor_bridge.hpp"
@@ -64,6 +67,9 @@
 class UavcanGnssBridge : public UavcanSensorBridgeBase
 {
 public:
+
+	// joystick_status_s &joystick_status() { return _joystick_status; }
+
 	static const char *const NAME;
 
 	UavcanGnssBridge(uavcan::INode &node);
@@ -76,6 +82,10 @@ public:
 	void print_status() const override;
 
 private:
+
+	// joystick_status_s	_joystick_status{};
+	// uORB::PublicationMulti<joystick_status_s> _joystick_status_pub{ORB_ID(joystick_status)};
+
 	/**
 	 * GNSS fix message will be reported via this callback.
 	 */

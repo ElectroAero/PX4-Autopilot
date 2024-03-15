@@ -60,7 +60,8 @@
 #include "uavcan_servers.hpp"
 
 #include "ENautic/electron.hpp"
-#include "ENautic/joystickCAN.hpp"
+// Shami - currently not working
+// #include "actuators/joystickCAN.hpp"
 #include "debug/controlSetpoints.hpp"
 
 #include <lib/drivers/device/Device.hpp>
@@ -118,6 +119,36 @@ private:
 	UavcanEscController &_esc_controller;
 	MixingOutput _mixing_output{"UAVCAN_EC", UavcanEscController::MAX_ACTUATORS, *this, MixingOutput::SchedulingPolicy::Auto, false, false};
 };
+
+/**
+ * UAVCAN mixing class for Joystick.
+ * It is separate from UavcanNode to have separate WorkItems and therefore allowing independent scheduling
+ * (I.e. UavcanMixingInterfaceJoystick runs upon actuator_control updates, whereas UavcanNode runs at
+ * a fixed rate or upon bus updates).
+ * All work items are expected to run on the same work queue.
+ * If it doesn't work, blame Shami...
+ */
+// class UavcanMixingInterfaceJoystick : public OutputModuleInterface
+// {
+// public:
+// 	UavcanMixingInterfaceJoystick(pthread_mutex_t &node_mutex, UavcanJoystickController &joystick_controller)
+// 		: OutputModuleInterface(MODULE_NAME "-enautic-joystick", px4::wq_configurations::uavcan),
+// 		  _node_mutex(node_mutex),
+// 		  _joystick_controller (joystick_controller) {}
+
+// 	bool updateOutputs(bool stop_motors, uint16_t outputs[MAX_ACTUATORS],
+// 			   unsigned num_outputs, unsigned num_control_groups_updated) override;
+
+// 	MixingOutput &mixingOutput() { return _mixing_output; }
+
+// protected:
+// 	void Run() override;
+// private:
+// 	friend class UavcanNode;
+// 	pthread_mutex_t &_node_mutex;
+// 	UavcanJoystickController &_joystick_controller;
+// 	MixingOutput _mixing_output{"UAVCAN_SV", UavcanServoController::MAX_ACTUATORS, *this, MixingOutput::SchedulingPolicy::Auto, false, false};
+// };
 
 /**
  * UAVCAN mixing class for Servos.
@@ -233,7 +264,8 @@ private:
 	UavcanBeepController		_beep_controller;
 	UavcanEscController		_esc_controller;
 	UavcanElectron			_electron_send_controller;
-	UavcanJoyBridge			_joystickCAN_send_controller;
+	// UavcanJoystickController	_joystick_controller;
+	// UavcanMixingInterfaceJoystick	_mixing_interface_joystick{_node_mutex, _joystick_controller};
 	UavcanJoystickCommand		_controlSetpoint_send_controller;
 	UavcanServoController		_servo_controller;
 	UavcanMixingInterfaceESC 	_mixing_interface_esc{_node_mutex, _esc_controller};

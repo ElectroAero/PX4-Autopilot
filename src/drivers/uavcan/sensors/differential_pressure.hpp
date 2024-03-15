@@ -43,6 +43,9 @@
 
 #include <uavcan/equipment/air_data/RawAirData.hpp>
 
+#include <uORB/topics/joystick_status.h>
+#include <uORB/PublicationMulti.hpp>
+
 class UavcanDifferentialPressureBridge : public UavcanSensorBridgeBase
 {
 public:
@@ -54,7 +57,13 @@ public:
 
 	int init() override;
 
+	joystick_status_s &joystick_status() { return _joystick_status; }
+
 private:
+
+	joystick_status_s	_joystick_status{};
+	uORB::PublicationMulti<joystick_status_s> _joystick_status_pub{ORB_ID(joystick_status)};
+
 	void air_sub_cb(const uavcan::ReceivedDataStructure<uavcan::equipment::air_data::RawAirData> &msg);
 
 	typedef uavcan::MethodBinder < UavcanDifferentialPressureBridge *,

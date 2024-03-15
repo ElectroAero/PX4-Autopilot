@@ -160,9 +160,11 @@ px4_add_module(
 		actuators/hardpoint.cpp
 		actuators/servo.cpp
 
+		# Shami - currently not working, look at under sensors
+		# actuators/joystickCAN.cpp
+
 		#Custom EN
 		ENautic/electron.cpp
-		ENautic/joystickCAN.cpp
 
 
 		debug/controlSetpoints.cpp
@@ -182,6 +184,7 @@ px4_add_module(
 		sensors/ice_status.cpp
 		sensors/hygrometer.cpp
 		sensors/safety_button.cpp
+		sensors/joystick.cpp
 	MODULE_CONFIG
 		module.yaml
 	DEPENDS
