@@ -169,10 +169,10 @@ int joyCAN_daemon_app_main(int argc, char *argv[]) {
 		printf("Left Button = %f | ", (double)joystick_status.lbutton);
 		printf("Right Button = %f | ", (double)joystick_status.rbutton);
 
-		printf("Roll = %d | ", (int)(manual_control_setpoint.roll * 255));
-		printf("Pitch = %d | ", (int)(manual_control_setpoint.pitch * 255));
-		printf("Yaw = %d | ", (int)(manual_control_setpoint.yaw * 255));
-		printf("Throttle = %d\n", (int)(manual_control_setpoint.throttle * 255));
+		printf("Roll = %d | ", (int)(manual_control_setpoint.roll * 100));
+		printf("Pitch = %d | ", (int)(manual_control_setpoint.pitch * 100));
+		printf("Yaw = %d | ", (int)(manual_control_setpoint.yaw * 100));
+		printf("Throttle = %d\n", (int)(manual_control_setpoint.throttle * 100));
 
 		printf("Left Motor = %f | ", (double)actuator_outputs.output[0]);
 		printf("Right Motor = %f | ", (double)actuator_outputs.output[1]);

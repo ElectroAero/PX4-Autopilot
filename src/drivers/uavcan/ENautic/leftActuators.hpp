@@ -1,7 +1,7 @@
 #pragma once
 
 #include <uavcan/uavcan.hpp>
-#include <uavcan/equipment/enautic/Electron.hpp>
+#include <uavcan/equipment/enautic/LeftActuators.hpp>
 // #include <uORB/topics/battery_status.h>
 #include <uORB/topics/actuator_outputs.h>
 // #include <uORB/topics/vehicle_attitude.h>
@@ -10,11 +10,11 @@
 
 #include <perf/perf_counter.h>
 
-class UavcanElectron
+class UavcanLeftActuators
 {
 	public:
-		UavcanElectron(uavcan::INode &node);
-		~UavcanElectron();
+		UavcanLeftActuators(uavcan::INode &node);
+		~UavcanLeftActuators();
 
 		int init();
 
@@ -38,9 +38,9 @@ class UavcanElectron
 
 		void periodic_update(const uavcan::TimerEvent &);
 		typedef uavcan::MethodBinder
-		<UavcanElectron *, void (UavcanElectron::*)(const uavcan::TimerEvent &)> TimerCbBinder;
+		<UavcanLeftActuators *, void (UavcanLeftActuators::*)(const uavcan::TimerEvent &)> TimerCbBinder;
 
 		uavcan::INode 		&_node;
-		uavcan::Publisher<uavcan::equipment::enautic::Electron> _uavcan_pub_electron_send;
+		uavcan::Publisher<uavcan::equipment::enautic::LeftActuators> _uavcan_pub_left_actuators_send;
 		uavcan::TimerEventForwarder<TimerCbBinder> _timer;
 };

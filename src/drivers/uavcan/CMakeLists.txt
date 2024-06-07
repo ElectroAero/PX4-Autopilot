@@ -164,7 +164,8 @@ px4_add_module(
 		# actuators/joystickCAN.cpp
 
 		#Custom EN
-		ENautic/electron.cpp
+		ENautic/leftActuators.cpp
+		ENautic/rightActuators.cpp
 
 
 		debug/controlSetpoints.cpp

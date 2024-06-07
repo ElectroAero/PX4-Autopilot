@@ -59,7 +59,8 @@
 #include "uavcan_driver.hpp"
 #include "uavcan_servers.hpp"
 
-#include "ENautic/electron.hpp"
+#include "ENautic/leftActuators.hpp"
+#include "ENautic/rightActuators.hpp"
 // Shami - currently not working
 // #include "actuators/joystickCAN.hpp"
 #include "debug/controlSetpoints.hpp"
@@ -263,9 +264,10 @@ private:
 	UavcanArmingStatus		_arming_status_controller;
 	UavcanBeepController		_beep_controller;
 	UavcanEscController		_esc_controller;
-	UavcanElectron			_electron_send_controller;
+	UavcanLeftActuators		_left_actuators_controller;
+	UavcanRightActuators		_right_actuators_controller;
 	// UavcanJoystickController	_joystick_controller;
-	// UavcanMixingInterfaceJoystick	_mixing_interface_joystick{_node_mutex, _joystick_controller};
+	// UavcanMixingInterfaceJoystick _mixing_interface_joystick{_node_mutex, _joystick_controller};
 	UavcanJoystickCommand		_controlSetpoint_send_controller;
 	UavcanServoController		_servo_controller;
 	UavcanMixingInterfaceESC 	_mixing_interface_esc{_node_mutex, _esc_controller};

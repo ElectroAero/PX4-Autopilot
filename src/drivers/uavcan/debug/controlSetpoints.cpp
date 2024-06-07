@@ -44,10 +44,10 @@ void UavcanJoystickCommand::periodic_update(const uavcan::TimerEvent &)
 		orb_copy(ORB_ID(manual_control_setpoint), controlSet_sub, &controlSetpoints);
 	}
 
-	int roll = (int)(controlSetpoints.roll / 100);
-	int pitch = (int)(controlSetpoints.pitch / 100);
-	int yaw = (int)(controlSetpoints.yaw / 100);
-	int throttle = (int)(controlSetpoints.throttle / 100);
+	int roll = (int)(controlSetpoints.roll * 100);
+	int pitch = (int)(controlSetpoints.pitch * 100);
+	int yaw = (int)(controlSetpoints.yaw * 100);
+	int throttle = (int)(controlSetpoints.throttle * 100);
 
 	uavcan::equipment::enautic::ControlSet msg;
 

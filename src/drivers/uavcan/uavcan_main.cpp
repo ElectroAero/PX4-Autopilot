@@ -83,7 +83,8 @@ UavcanNode::UavcanNode(uavcan::ICanDriver &can_driver, uavcan::ISystemClock &sys
 	_arming_status_controller(_node),
 	_beep_controller(_node),
 	_esc_controller(_node),
-	_electron_send_controller(_node),
+	_left_actuators_controller(_node),
+	_right_actuators_controller(_node),
 	// _joystick_controller(_node),
 	_controlSetpoint_send_controller(_node),
 	_servo_controller(_node),
@@ -587,13 +588,19 @@ UavcanNode::init(uavcan::NodeID node_id, UAVCAN_DRIVER::BusEvent &bus_events)
 		}
 	}
 
-	_electron_send_controller.init();
+	_left_actuators_controller.init();
+	_right_actuators_controller.init();
 	// _joystick_controller.init();
-	_controlSetpoint_send_controller.init();
+
+	/* Shami - commented manual control setpoint CAN
+	*
+	**/
+	 _controlSetpoint_send_controller.init();
 
 	// printf("Initialising EN Send \n");
 
-	_electron_send_controller.sendTelemetry(500);
+	_left_actuators_controller.sendTelemetry(500);
+	_right_actuators_controller.sendTelemetry(500);
 	_controlSetpoint_send_controller.sendTelemetry(500);
 
 	// Start the Node
